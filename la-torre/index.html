@@ -88,7 +88,7 @@
    ============================================================ */
 
 // ── 1) LE FOTO DEGLI AVATAR ──────────────────────────────
-// Metti due foto quadrate in questa stessa cartella "torre/"
+// Metti due foto quadrate in questa stessa cartella "la-torre/"
 // chiamate esattamente:  lei.jpg   e   lui.jpg
 // (se mancano, compaiono due faccine disegnate al posto loro)
 const FOTO_LEI = "lei.jpg";
@@ -234,8 +234,8 @@ function drawTower(){
     const passed = i < piano;
     ctx.fillStyle = passed ? 'rgba(255,207,92,.9)' : 'rgba(255,255,255,.10)';
     roundRect(cx-ww/2, wy, ww, wh, 8); ctx.fill();
-    // arco finestra
-    ctx.beginPath(); ctx.fillStyle = ctx.fillStyle;
+    // arco finestra (stesso colore della finestra qui sopra)
+    ctx.beginPath();
     ctx.arc(cx, wy, ww/2, Math.PI, 0); ctx.fill();
   }
   return {left, towerW, cx, groundY, floorH};
@@ -428,8 +428,12 @@ function showQuiz(){
   elFloortag.textContent=`Piano ${piano+1} di ${TOT}`;
   elDomanda.textContent=d.q;
   elAnswers.innerHTML='';
-  // mescola visivamente le risposte mantenendo l'indice giusto
+  // mescola le risposte mantenendo l'indice giusto (Fisher-Yates)
   const idx=d.opzioni.map((_,i)=>i);
+  for(let j=idx.length-1;j>0;j--){
+    const k=Math.floor(Math.random()*(j+1));
+    [idx[j],idx[k]]=[idx[k],idx[j]];
+  }
   for(const i of idx){
     const b=document.createElement('button');
     b.className='ans'; b.textContent=d.opzioni[i];
