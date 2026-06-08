@@ -5,14 +5,14 @@ Un piccolo gioco da browser: l'avatar di lei sale una **torre** rispondendo a
 dove vi siete conosciuti, c'è il tuo avatar, e i due si **baciano** 💖.
 
 ## Come si apre
-- In locale: apri `torre/index.html` con un doppio clic (si apre nel browser).
-- Online (dopo il push): `https://andrisis2.github.io/russo/torre/`
+- In locale: apri `la-torre/index.html` con un doppio clic (si apre nel browser).
+- Online (dopo il push): `https://andrisis2.github.io/torre/la-torre/`
   (GitHub Pages si aggiorna ~1 minuto dopo `git push`).
 
 ## Cosa devi mettere tu (2 minuti)
 
 ### 1) Le foto degli avatar
-Metti in questa cartella `torre/` due foto **quadrate**, chiamate esattamente:
+Metti in questa cartella `la-torre/` due foto **quadrate**, chiamate esattamente:
 - `lei.jpg` — la faccia di lei
 - `lui.jpg` — la tua faccia
 
