@@ -91,8 +91,9 @@
 // Metti due foto quadrate in questa stessa cartella "la-torre/"
 // chiamate esattamente:  lei.jpg   e   lui.jpg
 // (se mancano, compaiono due faccine disegnate al posto loro)
-const FOTO_LEI = "lei.jpg";
-const FOTO_LUI = "lui.jpg";
+const FOTO_LEI = "lei.png";
+const FOTO_LUI = "lui.png";
+const FOTO_MOSCHEA = "moschea.jpg";
 const NOME_LEI = "Lei";   // <- scrivi il suo nome
 const NOME_LUI = "Io";    // <- scrivi il tuo nome
 
@@ -145,9 +146,10 @@ function loadImg(src){
     im.src = src;
   });
 }
-let imgLei={ok:false}, imgLui={ok:false};
+let imgLei={ok:false}, imgLui={ok:false}, imgMoschea={ok:false};
 loadImg(FOTO_LEI).then(r=>imgLei=r);
 loadImg(FOTO_LUI).then(r=>imgLui=r);
+loadImg(FOTO_MOSCHEA).then(r=>imgMoschea=r);
 
 // ---- stato di gioco ----
 let state = 'intro';     // intro | quiz | climb | roof | kiss | end
@@ -243,6 +245,27 @@ function drawTower(){
 
 function drawMosqueRoof(){
   const cx=W/2, baseY=H*0.62, w=Math.min(W*0.8,460);
+
+  // usa la foto vera della moschea come sfondo se caricata
+  if(imgMoschea.ok && imgMoschea.img){
+    const im=imgMoschea.img;
+    const scale=Math.max(W/im.width, H/im.height);
+    const dw=im.width*scale, dh=im.height*scale;
+    ctx.drawImage(im, (W-dw)/2, (H-dh)/2, dw, dh);
+    // overlay notte
+    ctx.fillStyle='rgba(8,4,24,0.52)';
+    ctx.fillRect(0,0,W,H);
+    // stelle sopra la foto
+    const t=performance.now();
+    for(const s of stars){
+      const a=0.25+0.25*Math.sin(t/600+s.tw);
+      ctx.globalAlpha=a; ctx.fillStyle='#fff';
+      ctx.beginPath(); ctx.arc(s.x*W, s.y*H*0.38, s.r, 0, 6.29); ctx.fill();
+    }
+    ctx.globalAlpha=1;
+    return {baseY:baseY+26, terraceTop:baseY};
+  }
+
   // terrazza
   ctx.fillStyle='#2c1a4d';
   roundRect(cx-w/2, baseY, w, H*0.4, 14); ctx.fill();
@@ -346,7 +369,8 @@ let last=performance.now();
 let climbT=0, kissT=0;
 function frame(now){
   const dt=Math.min((now-last)/1000, 0.05); last=now;
-  drawSky(now);
+  const roofScene = state==='roof'||state==='kiss'||state==='end';
+  if(!roofScene || !imgMoschea.ok) drawSky(now);
 
   if(state==='intro'){
     const T=drawTower();
